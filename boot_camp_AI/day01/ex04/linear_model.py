@@ -15,7 +15,9 @@ class MyLinearRegression():
 		self.theta = np.array(theta)
 
 	def predict_(self, X):
-		if (len(self.theta) != X.shape[1] + 1):
+		# print(X.shape)
+		# print(self.theta.shape)
+		if (self.theta.shape[0] != X.shape[1] + 1):
 			return None
 		return (mat_vec_prod(X, self.theta[1:]) + self.theta[0])
 
@@ -31,12 +33,15 @@ class MyLinearRegression():
 		if (len(self.theta) != X.shape[1] + 1 or len(X) != len(Y) or len(X) == 0):
 			return None
 		X = np.c_[np.ones(len(X)), X]
+		# print("=================")
+		# print(self.mse_(X[:,1:], Y))
 		for n in range(n_cycle):
 			self.theta -= alpha * (vec_gradient(X, Y, self.theta)).reshape(self.theta.shape)
 		return self.theta
 
-	def mse_(self, x, y):
-		return (sum((self.predict_(x) - y)**2) / len(x))[0]
+	def mse_(self, X, Y):
+		Y = Y.reshape(Y.shape[0], 1)
+		return (sum((self.predict_(X) - Y)**2) / len(X))[0]
 
  
 # import pandas as pd
